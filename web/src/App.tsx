@@ -7,9 +7,7 @@ axios.defaults.baseURL =
 
 const App: React.FC = () => {
   return (
-    <div className="App">
       <Routes />
-    </div>
   );
 }
 
