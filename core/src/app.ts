@@ -2,7 +2,7 @@ import express, { Application } from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import helmet from 'helmet';
-import auth from './routes/auth';
+import auth from './routes/auth.route';
 
 const app: Application = express();
 

@@ -1,14 +1,12 @@
-import { Request, Response } from 'express';
+import { Handler, Request, Response } from 'express';
 import { QueryResult } from 'pg';
 import pool from '../db';
-import { hashPassword, verifyPassword } from '../utils/argon';
-import generateToken from '../utils/jwtAuth';
-import User from '../types/User';
+import Education from '../types/User';
 
-export const login = async (req: Request, res: Response): Promise<void> => {
+export const setData: Handler = async (req, res) => {
   try {
     const { email, password } = req.body;
-    const query = 'SELECT * FROM users WHERE email = $1';
+    const query = 'call setdata($1, $2, $3, $4, $5)';
     const results: QueryResult = await pool.query(query, [email]);
 
     if (results.rowCount !== 0) {
@@ -29,7 +27,10 @@ export const login = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-export const signup = async (req: Request, res: Response): Promise<void> => {
+export const updateData = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   try {
     const user = req.body;
     const hashedPassword: string = await hashPassword(user.password);

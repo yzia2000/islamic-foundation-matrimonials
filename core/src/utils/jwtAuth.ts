@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import User from '../types/User';
+import User from '../types/user';
 
 export default (user: User): string => {
   const secret: string = process.env.JWT_SECRET ?? 'examplesecret';
