@@ -1,51 +1,53 @@
-import { Handler, Request, Response } from 'express';
+import { Handler } from 'express';
 import { QueryResult } from 'pg';
 import pool from '../db';
-import Education from '../types/User';
+import { BioData } from '../types/biodata';
 
 export const setData: Handler = async (req, res) => {
   try {
-    const { email, password } = req.body;
-    const query = 'call setdata($1, $2, $3, $4, $5)';
-    const results: QueryResult = await pool.query(query, [email]);
-
-    if (results.rowCount !== 0) {
-      const hashedPassword: string = results.rows[0].password;
-      const valid = await verifyPassword(hashedPassword, password);
-      if (!valid) {
-        res.status(403).send('Incorrect password');
-      } else {
-        const user: User = results.rows[0];
-        const jwtToken = generateToken(user);
-        res.status(203).json(jwtToken);
-      }
-    } else {
-      res.status(403).send("Handle doesn't exist");
-    }
+    const data: BioData = req.body;
+    const query = 'call set_data($1, $2, $3, $4, $5)';
+    await pool.query(query, [
+      data.gender,
+      data.educationHistory,
+      data.employmentHistroy,
+      data.religion
+    ]);
+    res.status(201).send("Handle doesn't exist");
   } catch (error) {
     res.status(403).send('Something went wrong..');
   }
 };
 
-export const updateData = async (
-  req: Request,
-  res: Response
-): Promise<void> => {
+export const updateData: Handler = async (req, res) => {
   try {
-    const user = req.body;
-    const hashedPassword: string = await hashPassword(user.password);
-    const query =
-      'INSERT INTO users(handle, firstname, lastname, email, password) VALUES ($1, $2, $3, $4, $5)';
+    const data: BioData = req.body;
+    const query = 'call update_data($1, $2, $3, $4, $5)';
     await pool.query(query, [
-      user.handle,
-      user.firstname,
-      user.lastname,
-      user.email,
-      hashedPassword
+      data.gender,
+      data.educationHistory,
+      data.employmentHistroy,
+      data.religion
     ]);
     res.status(200).send('User has been registered');
   } catch (error) {
     console.error(error);
     res.status(403).send('Something went wrong..');
+  }
+};
+
+export const getData: Handler = async (req, res) => {
+  try {
+    const userId = req.body.userId;
+    const query = 'select getdata($1)';
+    const results: QueryResult = await pool.query(query, [userId]);
+    if (results.rowCount !== 0) {
+      res.status(200).json(results.rows[0]);
+    } else {
+      res.status(204).send('No information found');
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Something went wrong..');
   }
 };

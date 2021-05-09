@@ -1,9 +1,10 @@
 import express, { Router } from 'express';
-import { login, signup } from '../handlers/data';
+import { getData, setData, updateData } from '../handlers/data';
 
 const data: Router = express.Router();
 
-data.post('/', login);
-data.put('/', signup);
+data.post('/', setData);
+data.put('/', updateData);
+data.get('/', getData);
 
 export default data;
