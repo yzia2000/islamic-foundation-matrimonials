@@ -3,7 +3,7 @@ import { login, signup } from '../handlers/auth';
 
 const auth: Router = express.Router();
 
-auth.post('/login', login);
+auth.get('/login', login);
 auth.post('/signup', signup);
 
 export default auth;

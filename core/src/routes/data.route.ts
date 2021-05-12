@@ -1,10 +1,11 @@
 import express, { Router } from 'express';
-import { getData, setData, updateData } from '../handlers/data';
+import { getData, setData } from '../handlers/data';
+import { verifyToken } from '../utils/jwtAuth';
 
 const data: Router = express.Router();
 
-data.post('/', setData);
-data.put('/', updateData);
-data.get('/', getData);
+data.post('/', verifyToken, setData);
+data.put('/', verifyToken, setData);
+data.get('/', verifyToken, getData);
 
 export default data;

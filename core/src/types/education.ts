@@ -12,4 +12,5 @@ export interface Education {
   subjects?: string[];
   awards?: string[];
   extraCurriculur?: string[];
+  toPostgres (prepareValue: (value: any) => any): any;
 }

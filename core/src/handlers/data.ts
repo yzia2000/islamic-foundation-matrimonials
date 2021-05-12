@@ -6,39 +6,24 @@ import { BioData } from '../types/biodata';
 export const setData: Handler = async (req, res) => {
   try {
     const data: BioData = req.body;
-    const query = 'call set_data($1, $2, $3, $4, $5)';
+    const query = 'call set_data_end($1, $2, $3, $4, $5, $6)';
     await pool.query(query, [
+      req.body.user.id,
+      JSON.stringify(data.educationHistory),
+      JSON.stringify(data.employmentHistory),
+      data.religion,
       data.gender,
-      data.educationHistory,
-      data.employmentHistroy,
-      data.religion
+      data.description
     ]);
-    res.status(201).send("Handle doesn't exist");
+    res.status(201).send("Biodata updated");
   } catch (error) {
-    res.status(403).send('Something went wrong..');
-  }
-};
-
-export const updateData: Handler = async (req, res) => {
-  try {
-    const data: BioData = req.body;
-    const query = 'call update_data($1, $2, $3, $4, $5)';
-    await pool.query(query, [
-      data.gender,
-      data.educationHistory,
-      data.employmentHistroy,
-      data.religion
-    ]);
-    res.status(200).send('User has been registered');
-  } catch (error) {
-    console.error(error);
     res.status(403).send('Something went wrong..');
   }
 };
 
 export const getData: Handler = async (req, res) => {
   try {
-    const userId = req.body.userId;
+    const userId = req.body.user.userId;
     const query = 'select getdata($1)';
     const results: QueryResult = await pool.query(query, [userId]);
     if (results.rowCount !== 0) {

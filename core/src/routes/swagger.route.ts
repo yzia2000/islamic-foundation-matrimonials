@@ -1,23 +1,9 @@
-import swaggerUi from 'swagger-ui-express';
-import express, { Router } from 'express';
-import swaggerJSDoc from 'swagger-jsdoc';
+import express, { Router } from "express";
+import * as swaggerUi from 'swagger-ui-express';
+import config from '../openapi3-config.json';
 
-const swagger: Router = express.Router();
+const swagger: Router = express.Router()
+swagger.use('/', swaggerUi.serve);
+swagger.get('/', swaggerUi.setup(config));
 
-const options = {
-  definition: {
-    openapi: '3.0.0',
-    info: {
-      title: 'Foodie Docs',
-      description:
-        'Minimal API that handles restaurant and user transactions and analytics',
-      version: '1.0.0',
-    },
-  },
-  apis: ['./src/routes/*.route*', './dist/routes/*.route*'],
-};
-
-const swaggerSpec = swaggerJSDoc(options);
-
-swagger.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 export default swagger;

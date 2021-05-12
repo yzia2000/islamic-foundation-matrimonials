@@ -1,11 +1,12 @@
 import { Education } from './education';
 import { Employment } from './employment';
-import { Religion } from './religion';
+import { IslamicSchool } from './religion';
+import { Gender } from './user';
 
 export interface BioData {
-  gender: boolean;
+  gender?: Gender;
   educationHistory: Education[];
-  employmentHistroy: Employment[];
-  religion: Religion;
+  employmentHistory: Employment[];
+  religion: IslamicSchool;
   description: string
 }

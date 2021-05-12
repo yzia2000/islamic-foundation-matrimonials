@@ -1,13 +1,13 @@
-import { Request, Response } from 'express';
+import { Handler, } from 'express';
 import { QueryResult } from 'pg';
 import pool from '../db';
 import { hashPassword, verifyPassword } from '../utils/argon';
-import generateToken from '../utils/jwtAuth';
-import User from '../types/user';
+import { generateToken } from '../utils/jwtAuth';
+import { User } from '../types/user';
 
-export const login = async (req: Request, res: Response): Promise<void> => {
+export const login: Handler = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { email, password } = req.query as {email: string, password: string};
     const query = 'SELECT * FROM users WHERE email = $1';
     const results: QueryResult = await pool.query(query, [email]);
 
@@ -15,21 +15,21 @@ export const login = async (req: Request, res: Response): Promise<void> => {
       const hashedPassword: string = results.rows[0].password;
       const valid = await verifyPassword(hashedPassword, password);
       if (!valid) {
-        res.status(403).send('Incorrect password');
+        res.status(400).send('Incorrect password');
       } else {
         const user: User = results.rows[0];
         const jwtToken = generateToken(user);
-        res.status(203).json(jwtToken);
+        res.status(200).json(jwtToken);
       }
     } else {
-      res.status(403).send("Handle doesn't exist");
+      res.status(400).send("Handle doesn't exist");
     }
   } catch (error) {
-    res.status(403).send('Something went wrong..');
+    res.status(500).send('Something went wrong..');
   }
 };
 
-export const signup = async (req: Request, res: Response): Promise<void> => {
+export const signup: Handler = async (req, res) => {
   try {
     const user = req.body;
     const hashedPassword: string = await hashPassword(user.password);
@@ -45,6 +45,6 @@ export const signup = async (req: Request, res: Response): Promise<void> => {
     res.status(200).send('User has been registered');
   } catch (error) {
     console.error(error);
-    res.status(403).send('Something went wrong..');
+    res.status(400).send('Something went wrong..');
   }
 };
