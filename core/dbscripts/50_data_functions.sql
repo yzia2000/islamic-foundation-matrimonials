@@ -2,7 +2,7 @@ create or replace procedure set_data(
   uid integer,
   edu_hist education[], 
   emp_hist employment[], 
-  rel_school religious_school,
+  rel religion,
   gender gender,
   description text
 ) 
@@ -56,8 +56,8 @@ begin
     end loop;
   end if;
 
-  if rel_school is not null then
-    update users set school_of_thought = rel_school where id = uid;
+  if rel is not null then
+    update users set religion = rel where id = uid;
   end if;
 
   if gender is not null then
@@ -74,17 +74,19 @@ create or replace procedure set_data_end(
   user_id integer,
   edu_hist text, 
   emp_hist text, 
-  rel_school religious_school,
+  rel text,
   gender gender,
   description text
 ) as $$
 declare
   edu_hist_records education[];
   emp_hist_records employment[];
+  religion_record religion;
 begin
   edu_hist_records := (select array(select json_populate_recordset(null::education, edu_hist::json)));
   emp_hist_records := (select array(select json_populate_recordset(null::employment, emp_hist::json)));
+  religion_record := (select json_populate_record(null::religion, rel::json));
   call set_data(user_id, edu_hist_records,
-    emp_hist_records, rel_school, gender, description);
+    emp_hist_records, religion_record, gender, description);
 end;
 $$ language plpgsql;

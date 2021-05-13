@@ -1,4 +1,4 @@
-import { IslamicSchool } from './religion';
+import { Religion } from './religion';
 export enum Gender {
   male,
   female,
@@ -14,5 +14,5 @@ export interface User {
   lastname: string;
   gender?: Gender;
   description?: string;
-  school_of_thought?: IslamicSchool
+  religion?: Religion
 }

@@ -7,7 +7,6 @@ create type education as (
   minor varchar(20),
   subjects varchar(20)[],
   awards varchar(20)[],
-  extracurriculurs varchar(20)[],
   country varchar(20),
   state varchar(20),
   city varchar(20),
@@ -19,10 +18,6 @@ create type employment as (
   role varchar(20), 
   company varchar(20), 
   description text
-);
-
-create type religion as (
-  school religious_school
 );
 
 create type biodata as (

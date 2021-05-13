@@ -11,7 +11,7 @@ export const setData: Handler = async (req, res) => {
       req.body.user.id,
       JSON.stringify(data.educationHistory),
       JSON.stringify(data.employmentHistory),
-      data.religion,
+      JSON.stringify(data.religion),
       data.gender,
       data.description
     ]);

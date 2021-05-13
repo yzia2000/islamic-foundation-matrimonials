@@ -225,12 +225,6 @@
               "type": "string"
             }
           },
-          "extraCurriculurs": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
           "name": {
             "type": "string"
           },

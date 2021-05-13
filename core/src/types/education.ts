@@ -9,8 +9,9 @@ export interface Education {
   level: EducationLevel;
   institution: string;
   major?: string;
+  minor?: string;
   subjects?: string[];
   awards?: string[];
-  extraCurriculur?: string[];
-  toPostgres (prepareValue: (value: any) => any): any;
+  from_date?: Date;
+  to_date?: Date;
 }
