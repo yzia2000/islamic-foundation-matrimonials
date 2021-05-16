@@ -236,6 +236,16 @@
           },
           "city": {
             "type": "string"
+          },
+          "from_date": {
+            "type": "string",
+            "format": "date",
+            "example": "1-1-2021"
+          },
+          "to_date": {
+            "type": "string",
+            "format": "date",
+            "example": "1-1-2022"
           }
         },
         "xml": {
@@ -273,6 +283,30 @@
           "name": "Employment"
         }
       },
+      "Contact": {
+        "required": ["country", "state", "city"],
+        "type": "object",
+        "properties": {
+          "country": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string"
+          },
+          "city": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          }
+        }
+      },
       "Biodata": {
         "type": "object",
         "properties": {
@@ -291,6 +325,9 @@
             "items": {
               "$ref": "#/components/schemas/Employment"
             }
+          },
+          "contact": {
+            "$ref": "#/components/schemas/Contact"
           },
           "religion": {
             "$ref": "#/components/schemas/Religion"

@@ -8,11 +8,20 @@ create type religion as (
 create table users(
   id serial primary key,
   handle varchar(30) unique not null,
-  firstname varchar(30),
-  lastname varchar(30),
-  email varchar(30) unique not null,
+  firstname varchar(255),
+  lastname varchar(255),
+  email varchar(255) unique not null,
   password text not null,
   gender gender,
   religion religion,
   description text
+);
+
+create table contacts(
+  user_id integer primary key references users(id),
+  country varchar(20) not null,
+  state varchar(20) not null,
+  city varchar(20) not null,
+  address text,
+  phone varchar(10)
 );

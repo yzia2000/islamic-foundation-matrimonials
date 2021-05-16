@@ -14,6 +14,15 @@ create type education as (
   to_date date
 );
 
+create type contact_details as (
+  country varchar(20),
+  state varchar(20),
+  city varchar(20),
+  address text,
+  phone varchar(10),
+  email varchar(255)
+);
+
 create type employment as (
   role varchar(20), 
   company varchar(20), 
@@ -22,8 +31,10 @@ create type employment as (
 
 create type biodata as (
   gender gender,
-  education_history education[], 
-  employment_history employment[], 
+  education_history json, 
+  employment_history json, 
+  contact json,
+  religion json,
   description text
 );
 
@@ -43,6 +54,7 @@ create table enrolls(
   major varchar(20),
   minor varchar(20),
   subjects varchar(20)[],
+  awards varchar(20)[],
   from_date date,
   to_date date,
   primary key(school_id, user_id, level)
@@ -59,12 +71,4 @@ create table works(
   role varchar(20) not null,
   description text,
   primary key(user_id, company_id, role)
-);
-
-create type test as (
-  gender gender
-);
-
-create table testt (
-  t test[]
 );
