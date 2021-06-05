@@ -116,11 +116,15 @@ declare
   rel religion;
   contact json;
   descr text;
+  fname varchar(255);
+  lname varchar(255);
 begin
-  select U.gender, U.religion, U.description into r from users U where U.id = uid;
+  select U.gender, U.religion, U.description, U.firstname, U.lastname into r from users U where U.id = uid;
   gend := r.gender;
   rel := r.religion;
   descr := r.description;
+  fname := r.firstname;
+  lname := r.lastname;
 
   select to_json(row(C.country, C.state, C.city, C.address, C.phone, U.email)::contact_details) into contact
     from users U inner join contacts C on U.id = C.user_id where C.user_id = uid;
@@ -133,9 +137,46 @@ begin
     companies C on W.company_id = C.id where W.user_id = uid;
 
   return(
-    select row(gend, array_to_json(edu_hist)::text, 
+    select row(uid, fname, lname, gend, array_to_json(edu_hist)::text, 
       array_to_json(emp_hist)::text, (select to_json(contact)),
       (select to_json(rel)), descr)::biodata
   );
 end;
 $$ language plpgsql;
+
+create or replace 
+function get_users(
+  gend gender,
+  lim integer default 20,
+  page integer default 1
+) returns list_data
+language plpgsql as $$
+declare 
+begin
+  if lim is null then
+    lim := 20;
+  end if;
+
+  if page is null then
+    page := 1;
+  end if;
+
+  raise notice '%', lim;
+  raise notice '%', page;
+
+  return(with candidates as (
+    select u.id
+    from users u
+    where u.gender = gend
+    order by firstname, lastname
+  ),
+  limited as (
+    select c.id
+    from candidates c
+    limit lim
+    offset lim * (page - 1)
+  )
+  select row(page, json_agg(get_data(l.id)), ceiling((select count(c.id) from candidates c)/lim::decimal))::list_data
+    from limited l);
+end;
+$$;

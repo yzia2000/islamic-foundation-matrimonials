@@ -1,4 +1,4 @@
-version: "3.7"
+version: "3.9"
 services:
     db:
         image: postgres:13-alpine
@@ -27,6 +27,41 @@ services:
             - db
         ports:
             - '5000:5000'
+        profiles: ['dev']
+
+    api-test:
+        image: yzia2000/zims-classroom:test
+        env_file:
+            - .env.local
+        environment:
+            - NODE_ENV=test
+        build:
+            context: .
+            target: builder
+        container_name: api-test
+        command: ./wait-for-it.sh db:5432 -- /bin/sh -c "npm run test"
+        depends_on:
+            - db
+        ports:
+            - '5000:5000'
+        profiles: ['test']
+
+    api-prod:
+        image: yzia2000/zims-classroom:latest
+        environment:
+            - NODE_ENV=production
+            - POSTGRES_PASSWORD
+            - POSTGRES_USER
+            - POSTGRES_DB
+            - JWT_SECRET
+        build:
+            context: .
+        container_name: api
+        depends_on:
+            - db
+        ports:
+            - '5000:5000'
+        profiles: ['prod']
 
 volumes:
     dbdata:

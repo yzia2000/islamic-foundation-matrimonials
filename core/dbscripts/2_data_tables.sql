@@ -23,6 +23,12 @@ create type contact_details as (
   email varchar(255)
 );
 
+create type list_data as (
+  current_page integer,
+  data json,
+  max_pages integer
+);
+
 create type employment as (
   role varchar(20), 
   company varchar(20), 
@@ -30,9 +36,12 @@ create type employment as (
 );
 
 create type biodata as (
+  id integer,
+  firstname varchar(255),
+  lastname varchar(255),
   gender gender,
-  education_history json, 
-  employment_history json, 
+  "educationHistory" json, 
+  "employmentHistory" json, 
   contact json,
   religion json,
   description text

@@ -12,6 +12,9 @@ export interface Contact {
 }
 
 export interface BioData {
+  id?: number
+  firstname?: string;
+  lastname?: string;
   gender?: Gender;
   educationHistory: Education[];
   employmentHistory: Employment[];

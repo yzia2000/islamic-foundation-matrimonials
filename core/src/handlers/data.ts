@@ -29,16 +29,7 @@ export const getData: Handler = async (req, res) => {
     const query = 'select * from get_data($1)';
     const results: QueryResult = await pool.query(query, [userId]);
     if (results.rowCount !== 0) {
-      console.log(results.rows[0].education_history);
-      const data: BioData = {
-        gender: results.rows[0].gender,
-        educationHistory: results.rows[0].education_history,
-        employmentHistory: results.rows[0].employment_history,
-        religion: results.rows[0].religion,
-        contact: results.rows[0].contact,
-        description: results.rows[0].description
-      };
-      console.log(data.educationHistory);
+      const data = results.rows[0] as BioData;
       res.status(200).json(data);
     } else {
       res.status(204).send('No information found');
